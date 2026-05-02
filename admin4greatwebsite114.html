@@ -1,0 +1,868 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Admin Panel | Jamex Marketing Agency</title>
+    <link rel="icon" type="image/png" href="jamex.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            border-radius: 0 !important;
+            text-decoration: none;
+            list-style: none;
+            outline: none;
+            box-shadow: none !important;
+        }
+        body {
+            background-color: #F4F6F8;
+            color: #333;
+            min-height: 100vh;
+        }
+        :root {
+            --primary: #37B2F9;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gray-light: #F9F9F9;
+            --gray-mid: #EEEEEE;
+            --text-dark: #222222;
+            --error: #D32F2F;
+            --success: #2E7D32;
+        }
+
+        /* Hamburger button (shaking to attract attention) */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 3000;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .bar {
+            width: 100%;
+            height: 5px;
+            background-color: var(--black);
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        /* Shake animation to attract attention */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            10% { transform: translateX(-4px); }
+            20% { transform: translateX(4px); }
+            30% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            50% { transform: translateX(-2px); }
+            60% { transform: translateX(2px); }
+            70% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+            90% { transform: translateX(0); }
+            100% { transform: translateX(0); }
+        }
+        .menu-toggle.shaking {
+            animation: shake 1s ease-in-out infinite;
+        }
+
+        /* SIDEBAR */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100%;
+            background: var(--black);
+            color: var(--white);
+            padding: 80px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            border-right: 2px solid var(--primary);
+            transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 2500;
+        }
+        .admin-sidebar.open {
+            left: 0;
+        }
+        .admin-logo img {
+            height: 70px;
+            margin-bottom: 40px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .admin-nav-link {
+            display: block;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-left: 4px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+            background: none;
+            border-top: none;
+            border-right: none;
+            border-bottom: none;
+            width: 100%;
+            text-align: left;
+        }
+        .admin-nav-link:hover,
+        .admin-nav-link.active {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* White X close button */
+        .sidebar-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 900;
+            color: white;
+            background: transparent;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1;
+            font-family: 'Arial', sans-serif;
+            border: none;
+        }
+        .sidebar-close:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Overlay when sidebar open */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 2490;
+        }
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-main {
+            padding: 90px 6% 60px;
+            background: var(--white);
+            min-height: 100vh;
+            transition: margin-left 0.4s;
+        }
+
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            color: var(--black);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* CARDS FOR APPLICATIONS */
+        .applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .app-card {
+            background: var(--white);
+            border: 2px solid var(--gray-mid);
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            transition: border-color 0.2s;
+        }
+        .app-card:hover {
+            border-color: var(--primary);
+        }
+        .app-field {
+            min-width: 180px;
+        }
+        .app-field strong {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .app-field span {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .services-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .service-tag {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .delivery-status {
+            margin-top: 15px;
+            width: 100%;
+            border-top: 1px solid var(--gray-mid);
+            padding-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+        .delivery-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 18px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .delivery-btn.delivered {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .comment-box {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .comment-box input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--gray-mid);
+            font-size: 0.9rem;
+        }
+        .save-comment-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 10px 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: 2px solid var(--black);
+        }
+        .save-comment-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Analytics */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: var(--gray-light);
+            border: 2px solid var(--gray-mid);
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card .count {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .stat-card .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--gray-mid);
+            font-size: 1rem;
+        }
+        .btn-submit {
+            background: var(--primary);
+            color: var(--white);
+            padding: 16px 40px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+        .message {
+            padding: 12px;
+            margin-top: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid;
+        }
+        .message.success {
+            color: var(--success);
+            border-color: var(--success);
+            background: #E8F5E9;
+        }
+        .message.error {
+            color: var(--error);
+            border-color: var(--error);
+            background: #FFEBEE;
+        }
+
+        /* Image preview */
+        .image-preview {
+            max-width: 300px;
+            margin-top: 10px;
+            border: 2px solid var(--gray-mid);
+            display: none;
+        }
+        .image-preview img {
+            width: 100%;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                left: -100%;
+            }
+            .admin-sidebar.open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay for sidebar -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Shaking hamburger button -->
+    <button class="menu-toggle shaking" id="menuToggle" aria-label="Open menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <button class="sidebar-close" id="closeSidebar">X</button>
+        <div class="admin-logo">
+            <img src="jamex.png" alt="Jamex Logo">
+        </div>
+        <nav>
+            <button class="admin-nav-link active" data-section="applications">Applications</button>
+            <button class="admin-nav-link" data-section="analytics">Services By Delivery</button>
+            <button class="admin-nav-link" data-section="add-portfolio">Add Portfolio Showcase</button>
+            <button class="admin-nav-link" data-section="add-weekly">Weekly</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- APPLICATIONS SECTION -->
+        <section id="applications" class="section active">
+            <h2>Client Applications</h2>
+            <div class="applications-list" id="applicationsList">
+                <p>Loading applications...</p>
+            </div>
+        </section>
+
+        <!-- SERVICES & DELIVERY ANALYTICS -->
+        <section id="analytics" class="section">
+            <h2>Most Applied Services & Delivery Tracker</h2>
+            <div class="analytics-grid" id="analyticsGrid"></div>
+            <h3 style="margin-top:40px;">Manage Delivery Status</h3>
+            <div class="applications-list" id="deliveryAppList"></div>
+        </section>
+
+        <!-- ADD PORTFOLIO ITEM -->
+        <section id="add-portfolio" class="section">
+            <h2>Add to Portfolio Showcase</h2>
+            <form id="portfolioForm">
+                <div class="form-group">
+                    <label>Image (will be uploaded to Cloudinary)</label>
+                    <input type="file" id="portfolioImage" accept="image/*" required>
+                    <div class="image-preview" id="portfolioPreview">
+                        <img id="portfolioPreviewImg" src="" alt="Preview">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Name / Title</label>
+                    <input type="text" id="portfolioName" placeholder="Campaign name" required>
+                </div>
+                <div class="form-group">
+                    <label>Price (optional)</label>
+                    <input type="text" id="portfolioPrice" placeholder="e.g. UGX 500,000">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="portfolioCategory" required>
+                        <option value="">-- Select --</option>
+                        <option value="Branding">Branding</option>
+                        <option value="Content">Content</option>
+                        <option value="Growth">Growth</option>
+                        <option value="Graphics">Graphics</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="portfolioDesc" rows="3" placeholder="Brief description..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit" id="portfolioSubmitBtn">Upload & Save</button>
+                <div id="portfolioMsg" class="message" style="display:none;"></div>
+            </form>
+        </section>
+
+        <!-- ADD WEEKLY UPDATE -->
+        <section id="add-weekly" class="section">
+            <h2>Add Weekly Update</h2>
+            <form id="weeklyForm">
+                <div class="form-group">
+                    <label>Image (will be uploaded to Cloudinary)</label>
+                    <input type="file" id="weeklyImage" accept="image/*">
+                    <div class="image-preview" id="weeklyPreview">
+                        <img id="weeklyPreviewImg" src="" alt="Preview">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Text / Caption</label>
+                    <textarea id="weeklyText" rows="2" placeholder="Update message..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Video Link (optional)</label>
+                    <input type="url" id="weeklyVideoLink" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn-submit" id="weeklySubmitBtn">Publish Update</button>
+                <div id="weeklyMsg" class="message" style="display:none;"></div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Firebase & Admin Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDd7UUS03MeQyTF-3B29rX54RQkKXMqkk",
+            authDomain: "jamex2.firebaseapp.com",
+            projectId: "jamex2",
+            storageBucket: "jamex2.firebasestorage.app",
+            messagingSenderId: "275547773610",
+            appId: "1:275547773610:web:84ec3a054460c2c668ced3",
+            measurementId: "G-8TLQ808DHS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Cloudinary configuration
+        const CLOUDINARY_CLOUD_NAME = 'dopuutcka';
+        const CLOUDINARY_UPLOAD_PRESET = 'anubis_jamex';
+        const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+        // ---------- SIDEBAR TOGGLE LOGIC ----------
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('navOverlay');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            menuToggle.classList.remove('shaking');
+        }
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        menuToggle.addEventListener('click', openSidebar);
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+
+        setTimeout(() => {
+            menuToggle.classList.remove('shaking');
+        }, 5000);
+
+        // ---------- NAVIGATION ----------
+        const navLinks = document.querySelectorAll('.admin-nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        function switchSection(sectionId) {
+            sections.forEach(sec => sec.classList.remove('active'));
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            const activeLink = Array.from(navLinks).find(link => link.dataset.section === sectionId);
+            if (activeLink) activeLink.classList.add('active');
+            closeSidebar();
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const sectionId = link.getAttribute('data-section');
+                switchSection(sectionId);
+                if (sectionId === 'applications') loadApplications();
+                if (sectionId === 'analytics') loadAnalyticsAndDelivery();
+            });
+        });
+
+        // ---------- IMAGE PREVIEW ----------
+        document.getElementById('portfolioImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('portfolioPreview');
+            const img = document.getElementById('portfolioPreviewImg');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    img.src = ev.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        document.getElementById('weeklyImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('weeklyPreview');
+            const img = document.getElementById('weeklyPreviewImg');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    img.src = ev.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // ---------- CLOUDINARY UPLOAD HELPER ----------
+        async function uploadToCloudinary(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+            const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Cloudinary upload failed');
+            }
+
+            const data = await response.json();
+            return data.secure_url;
+        }
+
+        // ---------- APPLICATIONS LIST ----------
+        async function loadApplications() {
+            const container = document.getElementById('applicationsList');
+            container.innerHTML = '<p>Loading...</p>';
+            try {
+                const q = query(collection(db, "applications"), orderBy("submittedAt", "desc"));
+                const snapshot = await getDocs(q);
+                if (snapshot.empty) {
+                    container.innerHTML = '<p>No applications yet.</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const card = document.createElement('div');
+                    card.className = 'app-card';
+                    card.innerHTML = `
+                        <div class="app-field"><strong>Name</strong><span>${data.name || ''}</span></div>
+                        <div class="app-field"><strong>Email</strong><span>${data.email || 'N/A'}</span></div>
+                        <div class="app-field"><strong>Phone</strong><span>${data.phoneNumber || ''}</span></div>
+                        <div class="app-field"><strong>Location</strong><span>${data.location || ''}</span></div>
+                        <div class="app-field"><strong>Services</strong>
+                            <div class="services-tags">
+                                ${(data.services || []).map(s => `<span class="service-tag">${s}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="app-field"><strong>Products/Services</strong><span>${data.productsServices || ''}</span></div>
+                        <div class="app-field"><strong>Expected Date</strong><span>${data.expectedDate || 'Not specified'}</span></div>
+                        <div class="app-field"><strong>Website</strong><span>${data.website || 'N/A'}</span></div>
+                        <div class="app-field"><strong>Additional Info</strong><span>${data.additionalInfo || 'None'}</span></div>
+                        ${data.contentDetails ? `
+                        <div class="app-field"><strong>Social Platforms</strong><span>${data.contentDetails.socialMediaPlatforms?.join(', ') || ''}</span></div>
+                        <div class="app-field"><strong>Handlers</strong><span>${JSON.stringify(data.contentDetails.handlers || {})}</span></div>
+                        ` : ''}
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p>Error loading applications.</p>';
+            }
+        }
+
+        // ---------- ANALYTICS & DELIVERY STATUS ----------
+        async function loadAnalyticsAndDelivery() {
+            const grid = document.getElementById('analyticsGrid');
+            const listContainer = document.getElementById('deliveryAppList');
+            grid.innerHTML = '';
+            listContainer.innerHTML = '<p>Loading...</p>';
+
+            try {
+                const q = query(collection(db, "applications"), orderBy("submittedAt", "desc"));
+                const snapshot = await getDocs(q);
+                const apps = [];
+                snapshot.forEach(doc => apps.push({ id: doc.id, ...doc.data() }));
+
+                const serviceCounts = {};
+                apps.forEach(app => {
+                    (app.services || []).forEach(service => {
+                        serviceCounts[service] = (serviceCounts[service] || 0) + 1;
+                    });
+                });
+
+                Object.entries(serviceCounts).forEach(([service, count]) => {
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.innerHTML = `<div class="count">${count}</div><div class="label">${service}</div>`;
+                    grid.appendChild(card);
+                });
+                if (Object.keys(serviceCounts).length === 0) {
+                    grid.innerHTML = '<p>No data yet.</p>';
+                }
+
+                listContainer.innerHTML = '';
+                apps.forEach(app => {
+                    const card = document.createElement('div');
+                    card.className = 'app-card';
+                    card.innerHTML = `
+                        <div class="app-field"><strong>Name</strong><span>${app.name || ''}</span></div>
+                        <div class="app-field"><strong>Services</strong><span>${(app.services || []).join(', ')}</span></div>
+                        <div class="app-field"><strong>Phone</strong><span>${app.phoneNumber || ''}</span></div>
+                        <div class="delivery-status" data-id="${app.id}">
+                            <button class="delivery-btn ${app.delivered ? 'delivered' : ''}" data-delivered="${app.delivered || false}">
+                                ${app.delivered ? 'Delivered' : 'Mark Delivered'}
+                            </button>
+                            <div class="comment-box">
+                                <input type="text" placeholder="Add comment..." value="${app.comment || ''}" class="comment-input">
+                                <button class="save-comment-btn">Save</button>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+
+                document.querySelectorAll('.delivery-status').forEach(statusDiv => {
+                    const appId = statusDiv.dataset.id;
+                    const btn = statusDiv.querySelector('.delivery-btn');
+                    const commentInput = statusDiv.querySelector('.comment-input');
+                    const saveBtn = statusDiv.querySelector('.save-comment-btn');
+
+                    btn.addEventListener('click', async () => {
+                        const currentDelivered = btn.dataset.delivered === 'true';
+                        const newDelivered = !currentDelivered;
+                        try {
+                            await updateDoc(doc(db, 'applications', appId), { delivered: newDelivered });
+                            btn.dataset.delivered = newDelivered;
+                            btn.textContent = newDelivered ? 'Delivered' : 'Mark Delivered';
+                            btn.classList.toggle('delivered', newDelivered);
+                        } catch (err) {
+                            alert('Update failed: ' + err.message);
+                        }
+                    });
+
+                    saveBtn.addEventListener('click', async () => {
+                        const comment = commentInput.value.trim();
+                        try {
+                            await updateDoc(doc(db, 'applications', appId), { comment });
+                            alert('Comment saved.');
+                        } catch (err) {
+                            alert('Error: ' + err.message);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error(error);
+                listContainer.innerHTML = '<p>Error loading analytics.</p>';
+            }
+        }
+
+        // ---------- ADD PORTFOLIO (Cloudinary) ----------
+        document.getElementById('portfolioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('portfolioMsg');
+            const submitBtn = document.getElementById('portfolioSubmitBtn');
+            msgDiv.style.display = 'none';
+            
+            const fileInput = document.getElementById('portfolioImage');
+            const file = fileInput.files[0];
+            if (!file) {
+                msgDiv.textContent = 'Please select an image.';
+                msgDiv.className = 'message error';
+                msgDiv.style.display = 'block';
+                return;
+            }
+
+            // Disable button & show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Uploading to Cloudinary...';
+
+            try {
+                const imageUrl = await uploadToCloudinary(file);
+
+                submitBtn.textContent = 'Saving to database...';
+                const portfolioData = {
+                    name: document.getElementById('portfolioName').value.trim(),
+                    price: document.getElementById('portfolioPrice').value.trim(),
+                    category: document.getElementById('portfolioCategory').value,
+                    description: document.getElementById('portfolioDesc').value.trim(),
+                    imageUrl: imageUrl,
+                    createdAt: serverTimestamp()
+                };
+
+                await addDoc(collection(db, 'galleryItems'), portfolioData);
+                msgDiv.textContent = 'Portfolio item added successfully!';
+                msgDiv.className = 'message success';
+                msgDiv.style.display = 'block';
+                document.getElementById('portfolioForm').reset();
+                document.getElementById('portfolioPreview').style.display = 'none';
+            } catch (err) {
+                console.error(err);
+                msgDiv.textContent = 'Error: ' + err.message;
+                msgDiv.className = 'message error';
+                msgDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Upload & Save';
+            }
+        });
+
+        // ---------- ADD WEEKLY UPDATE (Cloudinary) ----------
+        document.getElementById('weeklyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msgDiv = document.getElementById('weeklyMsg');
+            const submitBtn = document.getElementById('weeklySubmitBtn');
+            msgDiv.style.display = 'none';
+
+            const fileInput = document.getElementById('weeklyImage');
+            const file = fileInput.files[0];
+            const text = document.getElementById('weeklyText').value.trim();
+            const videoLink = document.getElementById('weeklyVideoLink').value.trim();
+
+            if (!text) {
+                msgDiv.textContent = 'Please enter some text for the update.';
+                msgDiv.className = 'message error';
+                msgDiv.style.display = 'block';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = file ? 'Uploading to Cloudinary...' : 'Publishing...';
+
+            try {
+                let imageUrl = '';
+                if (file) {
+                    imageUrl = await uploadToCloudinary(file);
+                }
+
+                submitBtn.textContent = 'Saving to database...';
+                await addDoc(collection(db, 'weeklyUpdates'), {
+                    text,
+                    videoLink,
+                    imageUrl,
+                    createdAt: serverTimestamp()
+                });
+
+                msgDiv.textContent = 'Weekly update published!';
+                msgDiv.className = 'message success';
+                msgDiv.style.display = 'block';
+                document.getElementById('weeklyForm').reset();
+                document.getElementById('weeklyPreview').style.display = 'none';
+            } catch (err) {
+                console.error(err);
+                msgDiv.textContent = 'Error: ' + err.message;
+                msgDiv.className = 'message error';
+                msgDiv.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publish Update';
+            }
+        });
+
+        // Initial data load
+        loadApplications();
+        console.log('Admin panel ready. Cloudinary account:', CLOUDINARY_CLOUD_NAME, '| Preset:', CLOUDINARY_UPLOAD_PRESET);
+    </script>
+</body>
+                      </html>
