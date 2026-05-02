@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Contact Us | Jamex Marketing Agency</title>
+    <link rel="icon" type="image/png" href="jamex.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ----- CORE THEME & RESET -----
+           Primary color: #37B2F9
+           Rules: No border-radius, no box-shadows, no emojis
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            border-radius: 0 !important;
+            text-decoration: none;
+            list-style: none;
+            outline: none;
+            box-shadow: none !important;
+        }
+
+        body {
+            background-color: #FFFFFF;
+            color: #333333;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        :root {
+            --primary: #37B2F9;
+            --primary-dark: #1a8fc7;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gray-light: #F9F9F9;
+            --gray-mid: #EEEEEE;
+            --text-dark: #222222;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--white);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+        }
+
+        /* HEADER */
+        header {
+            width: 100%;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            background: var(--white);
+            position: fixed;
+            top: 0;
+            z-index: 2000;
+            border-bottom: 2px solid var(--gray-mid);
+        }
+        .logo-container img {
+            height: 60px;
+            display: block;
+        }
+
+        .menu-toggle {
+            width: 40px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 2100;
+        }
+        .bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--black);
+            transition: all 0.3s ease;
+        }
+        .menu-toggle.open .bar:nth-child(1) {
+            transform: translateY(13px) rotate(45deg);
+            background-color: var(--primary);
+        }
+        .menu-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.open .bar:nth-child(3) {
+            transform: translateY(-13px) rotate(-45deg);
+            background-color: var(--primary);
+        }
+
+        /* SIDE NAVIGATION DRAWER */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 350px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 2050;
+            display: flex;
+            flex-direction: column;
+            padding: 100px 40px 40px 40px;
+            transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            border-left: 5px solid var(--primary);
+            overflow-y: auto;
+        }
+        .side-nav.active {
+            right: 0;
+        }
+        .side-nav-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 900;
+            color: black;
+            background: transparent;
+            cursor: pointer;
+            transition: 0.2s;
+            line-height: 1;
+            font-family: 'Arial', sans-serif;
+        }
+        .side-nav-close:hover {
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+        .side-nav a {
+            font-size: 1.4rem;
+            color: var(--black);
+            margin-bottom: 30px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-bottom: 2px solid transparent;
+            width: fit-content;
+            transition: 0.2s;
+        }
+        .side-nav a:hover {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+        .side-nav a.nav-active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 2040;
+        }
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* PAGE CONTENT */
+        .page-content {
+            padding-top: 130px;
+            padding-bottom: 60px;
+            background: var(--white);
+            min-height: 100vh;
+        }
+        .page-header {
+            text-align: center;
+            padding: 0 6% 40px;
+        }
+        .page-header h1 {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 900;
+            color: var(--black);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+        .page-header .underline {
+            width: 100px;
+            height: 5px;
+            background: var(--primary);
+            margin: 0 auto 15px;
+        }
+        .page-header p {
+            color: #555;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* CONTACT CONTAINER */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 6% 40px;
+        }
+        .contact-card {
+            background: var(--gray-light);
+            border: 2px solid var(--gray-mid);
+            padding: 40px 30px;
+            transition: border-color 0.2s;
+        }
+        .contact-card:hover {
+            border-color: var(--primary);
+        }
+        .contact-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .contact-item {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .contact-item strong {
+            min-width: 70px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+        }
+        .contact-item a,
+        .contact-item span {
+            color: #333;
+            word-break: break-word;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .contact-item a:hover {
+            color: var(--primary);
+        }
+        .social-links-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .social-tag {
+            background: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: 0.2s;
+            border: 2px solid var(--primary);
+            display: inline-block;
+        }
+        .social-tag:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        /* ICON STYLES */
+        .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            transition: 0.2s;
+            border: 2px solid var(--primary);
+        }
+        .icon-circle.whatsapp-icon {
+            background: #25D366;
+            border-color: #25D366;
+        }
+        .icon-circle.email-icon {
+            background: #EA4335;
+            border-color: #EA4335;
+        }
+        .contact-row-icon {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        .contact-row-icon .info-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .contact-row-icon .info-text a {
+            color: #333;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .contact-row-icon .info-text a:hover {
+            color: var(--primary);
+        }
+
+        /* FORM SECTION */
+        .form-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 6% 60px;
+        }
+        .form-card {
+            background: var(--gray-light);
+            border: 2px solid var(--gray-mid);
+            padding: 40px 30px;
+            transition: border-color 0.2s;
+        }
+        .form-card:hover {
+            border-color: var(--primary);
+        }
+        .form-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+        .form-group label i {
+            color: var(--primary);
+            margin-right: 6px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            background: var(--white);
+            color: #333;
+            transition: border-color 0.2s;
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            resize: vertical;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+        .form-group textarea {
+            min-height: 140px;
+        }
+        .btn-submit {
+            background: var(--primary);
+            color: var(--white);
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-submit:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+        .btn-submit i {
+            font-size: 1.2rem;
+        }
+
+        /* QR SECTION */
+        .qr-section {
+            text-align: center;
+            padding: 50px 6%;
+            background: var(--gray-light);
+            border-top: 2px solid var(--gray-mid);
+            border-bottom: 2px solid var(--gray-mid);
+        }
+        .qr-section h2 {
+            font-size: 2rem;
+            color: var(--black);
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        .qr-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 250px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border: 3px solid var(--primary);
+            overflow: hidden;
+        }
+        .qr-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* scanning effect overlay */
+        .scan-effect {
+            position: relative;
+        }
+        .scan-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(55, 178, 249, 0.9);
+            box-shadow: 0 0 8px #37B2F9;
+            animation: scanMove 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            pointer-events: none;
+        }
+        @keyframes scanMove {
+            0% {
+                top: 0;
+                opacity: 1;
+            }
+            90% {
+                top: 100%;
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+        .btn-scan {
+            background: var(--primary);
+            color: var(--white);
+            padding: 16px 45px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+            transition: 0.2s;
+            margin-top: 20px;
+        }
+        .btn-scan:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+        .scan-note {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 50px 6% 30px;
+        }
+        .footer-main {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+        .footer-logo img {
+            height: 55px;
+            margin-bottom: 15px;
+        }
+        .footer-col h5 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+        .footer-col ul li a {
+            color: #aaa;
+            transition: 0.2s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        .copy-row {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #2a2a2a;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .side-nav {
+                width: 100%;
+                padding: 100px 30px;
+            }
+            .footer-main {
+                grid-template-columns: 1fr;
+            }
+            .qr-wrapper {
+                width: 200px;
+                padding: 10px;
+            }
+            .form-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-overlay" id="overlay"></div>
+
+    <header>
+        <div class="logo-container">
+            <img src="jamex.png" alt="Jamex Marketing Agency Logo">
+        </div>
+        <div class="menu-toggle" id="menuBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <!-- SIDE NAVIGATION -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-close" id="closeSideNavX">X</div>
+        <a href="index.html">Home</a>
+        <a href="apply.html">Apply Now</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="location.html">Location</a>
+        <a href="contact.html" class="nav-active">Contact Us</a>
+        <div style="margin-top: auto; border-top: 1px solid var(--gray-mid); padding-top: 30px;">
+            <p style="font-size: 0.8rem; color: #999; text-transform: uppercase;">Direct Line</p>
+            <p style="font-weight: bold; color: var(--primary);">+256 704 242193</p>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-header">
+            <h1>Contact Us</h1>
+            <div class="underline"></div>
+            <p>We're here to help. Reach out through any of the channels below and let's start a conversation.</p>
+        </div>
+
+        <!-- CONTACT DETAILS GRID -->
+        <div class="contact-container">
+            <!-- Phone & Call -->
+            <div class="contact-card">
+                <h3><i class="fa-solid fa-phone"></i> Phone &amp; Call</h3>
+                <div class="contact-item">
+                    <strong>Tel:</strong>
+                    <span>
+                        <a href="tel:+256704242193">+256 704 242193</a> <br>
+                        <a href="tel:+256753151103">+256 753 151103</a> <br>
+                        <a href="tel:+256760254053">+256 760 254053</a>
+                    </span>
+                </div>
+                <div class="contact-item">
+                    <strong>Call:</strong>
+                    <a href="tel:+256704242193" class="social-tag" style="display:inline-block; margin-top:5px;">
+                        <i class="fa-solid fa-phone"></i> Call Now
+                    </a>
+                </div>
+            </div>
+
+            <!-- Email (separated) -->
+            <div class="contact-card">
+                <h3><i class="fa-solid fa-envelope"></i> Email</h3>
+                <div class="contact-row-icon">
+                    <span class="icon-circle email-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <span class="info-text">
+                        <a href="mailto:jamexmarketingagency@gmail.com">jamexmarketingagency<br>@gmail.com</a>
+                    </span>
+                </div>
+                <a href="mailto:jamexmarketingagency@gmail.com" class="social-tag" style="display:inline-block; margin-top:10px;">
+                    <i class="fa-solid fa-paper-plane"></i> Send Email
+                </a>
+            </div>
+
+            <!-- WhatsApp (separated) -->
+            <div class="contact-card">
+                <h3><i class="fa-brands fa-whatsapp"></i> WhatsApp</h3>
+                <div class="contact-row-icon">
+                    <span class="icon-circle whatsapp-icon">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </span>
+                    <span class="info-text">
+                        <a href="https://wa.me/qr/HD2LAPF2K2C6G1" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+                    </span>
+                </div>
+                <a href="https://wa.me/qr/HD2LAPF2K2C6G1" target="_blank" rel="noopener noreferrer" class="social-tag" style="display:inline-block; margin-top:10px; background:#25D366; border-color:#25D366;">
+                    <i class="fa-brands fa-whatsapp"></i> Open WhatsApp
+                </a>
+            </div>
+
+            <!-- Social Media -->
+            <div class="contact-card">
+                <h3><i class="fa-solid fa-hashtag"></i> Social Media</h3>
+                <div class="social-links-row">
+                    <a href="https://www.tiktok.com/@jamexmarketingagency?_r=1&_t=ZS-95yKA8fCIPC" target="_blank" rel="noopener noreferrer" class="social-tag">
+                        <i class="fa-brands fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://www.instagram.com/jamex_marketing_agency?igsh=dmR2N215c3Blemo=" target="_blank" rel="noopener noreferrer" class="social-tag">
+                        <i class="fa-brands fa-instagram"></i> Instagram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM SECTION: Write name & message, click send to open email app -->
+        <div class="form-section">
+            <div class="form-card">
+                <h3><i class="fa-solid fa-pencil"></i> Send Us a Message</h3>
+                <p style="margin-bottom: 25px; color: #555;">Fill in your name and message below. When you click send, your default email application will open with everything pre-filled. No data is stored on this website.</p>
+                <form id="contactForm" action="mailto:jamexmarketingagency@gmail.com" method="GET" enctype="text/plain">
+                    <div class="form-group">
+                        <label for="senderName"><i class="fa-solid fa-user"></i> Your Name</label>
+                        <input type="text" id="senderName" name="Name" placeholder="Enter your full name" required autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="senderMessage"><i class="fa-solid fa-message"></i> Your Message</label>
+                        <textarea id="senderMessage" name="Message" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-paper-plane"></i> Send via Email
+                    </button>
+                </form>
+                <p style="margin-top: 15px; font-size: 0.8rem; color: #888;">
+                    <i class="fa-solid fa-circle-info"></i> This opens your email app (Outlook, Gmail, Apple Mail, etc.) with your name and message pre-filled.
+                </p>
+            </div>
+        </div>
+
+        <!-- QR CODE & SCAN SECTION -->
+        <div class="qr-section">
+            <h2><i class="fa-brands fa-whatsapp"></i> Scan to WhatsApp</h2>
+            <div class="qr-wrapper" id="qrContainer">
+                <img src="qr.jpg" alt="QR Code to WhatsApp" id="qrImage">
+            </div>
+            <a href="https://wa.me/qr/HD2LAPF2K2C6G1"><button class="btn-scan" id="scanQrButton"><i class="fa-solid fa-qrcode"></i> Scan QR Code</button></a>
+            <p class="scan-note">Point your camera at the QR code to open WhatsApp directly.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-main">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <img src="jamex.png" alt="Jamex Logo">
+                </div>
+                <p>Jamex Marketing Agency is a premier advertising firm based in Kampala, Uganda, dedicated to transforming business goals into measurable success through innovative marketing strategies.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Navigation</h5>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="apply.html">Service Application</a></li>
+                    <li><a href="gallery.html">Our Work</a></li>
+                    <li><a href="contact.html">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Our Services</h5>
+                <ul>
+                    <li><a href="#">Corporate Branding</a></li>
+                    <li><a href="#">Content Production</a></li>
+                    <li><a href="#">Field Marketing</a></li>
+                    <li><a href="#">Strategic Consulting</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copy-row">
+            &copy; 2026 Jamex Marketing Agency | Kampala, Uganda. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDd7UUS03MeQyTF-3B29rX54RQkKXMqkk",
+            authDomain: "jamex2.firebaseapp.com",
+            projectId: "jamex2",
+            storageBucket: "jamex2.firebasestorage.app",
+            messagingSenderId: "275547773610",
+            appId: "1:275547773610:web:84ec3a054460c2c668ced3",
+            measurementId: "G-8TLQ808DHS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
+    <!-- Navigation & Scan Button Logic -->
+    <script>
+        (function() {
+            // ---------- NAVIGATION TOGGLE ----------
+            const menuBtn = document.getElementById('menuBtn');
+            const sideNav = document.getElementById('sideNav');
+            const overlay = document.getElementById('overlay');
+            const closeX = document.getElementById('closeSideNavX');
+
+            function closeMenu() {
+                menuBtn.classList.remove('open');
+                sideNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            function openMenu() {
+                menuBtn.classList.add('open');
+                sideNav.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function toggleMenu() {
+                if (sideNav.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            }
+
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMenu();
+            });
+            overlay.addEventListener('click', closeMenu);
+            closeX.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeMenu();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sideNav.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+
+            // ---------- BUTTON CLICK SOUND ----------
+            function playButtonSound() {
+                try {
+                    const audio = new Audio('jx.mp3');
+                    audio.volume = 0.4;
+                    audio.play().catch(() => {});
+                } catch (err) {}
+            }
+            document.body.addEventListener('click', (event) => {
+                const target = event.target.closest(
+                    '.menu-toggle, .side-nav-close, .side-nav a, .social-tag, .btn-scan, .btn-submit');
+                if (target) playButtonSound();
+            });
+
+            // ---------- FORM: Build mailto with name + message ----------
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    const nameField = document.getElementById('senderName');
+                    const messageField = document.getElementById('senderMessage');
+
+                    if (nameField && messageField) {
+                        const name = nameField.value.trim();
+                        const message = messageField.value.trim();
+
+                        if (name && message) {
+                            const subject = 'Message from ' + name + ' - Jamex Contact Form';
+                            const body = 'Name: ' + name + '\n\nMessage:\n' + message;
+                            const mailtoLink = 'mailto:jamexmarketingagency@gmail.com' +
+                                '?subject=' + encodeURIComponent(subject) +
+                                '&body=' + encodeURIComponent(body);
+                            window.location.href = mailtoLink;
+                            e.preventDefault();
+                        }
+                    }
+                });
+            }
+
+            // ---------- QR SCAN SIMULATION & REDIRECT ----------
+            const scanBtn = document.getElementById('scanQrButton');
+            const qrWrapper = document.getElementById('qrContainer');
+
+            function triggerScanAndRedirect() {
+                if (!qrWrapper) return;
+                qrWrapper.classList.remove('scan-effect');
+                void qrWrapper.offsetWidth;
+                qrWrapper.classList.add('scan-effect');
+
+                setTimeout(() => {
+                    qrWrapper.classList.remove('scan-effect');
+                    window.location.href = 'https://wa.me/qr/HD2LAPF2K2C6G1';
+                }, 1050);
+            }
+
+            if (scanBtn) {
+                scanBtn.addEventListener('click', triggerScanAndRedirect);
+            }
+
+            // Handle missing QR image gracefully
+            const qrImg = document.getElementById('qrImage');
+            if (qrImg) {
+                qrImg.onerror = function() {
+                    this.src =
+                        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" fill="%23333"/%3E%3Ctext x="50" y="55" fill="white" font-size="14" text-anchor="middle"%3EQR%3C/text%3E%3C/svg%3E';
+                };
+            }
+        })();
+    </script>
+</body>
+</html>
