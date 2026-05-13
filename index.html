@@ -812,7 +812,25 @@
     </div>
 </footer>
 
-<script>        // ********** BACKGROUND EMAIL TRIGGER (FOR NEW SIGNUPS) **********
+<script>     
+  // Send welcome email if flagged from account.html signup
+const triggerEmail = localStorage.getItem('triggerWelcomeEmail');
+if (triggerEmail === 'true') {
+  const email = localStorage.getItem('welcomeEmail');
+  const name = localStorage.getItem('welcomeName');
+  localStorage.removeItem('triggerWelcomeEmail');
+  localStorage.removeItem('welcomeEmail');
+  localStorage.removeItem('welcomeName');
+  if (email) {
+    fetch('https://jemaxma-site.lubegadoreen02.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name })
+    }).catch(() => {});
+  }
+}
+  
+  // ********** BACKGROUND EMAIL TRIGGER (FOR NEW SIGNUPS) **********
         window.addEventListener('load', () => {
             const shouldSend = localStorage.getItem('triggerWelcomeEmail');
             
