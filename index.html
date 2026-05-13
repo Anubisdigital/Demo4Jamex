@@ -812,7 +812,38 @@
     </div>
 </footer>
 
-<script>
+<script>        // ********** BACKGROUND EMAIL TRIGGER (FOR NEW SIGNUPS) **********
+        window.addEventListener('load', () => {
+            const shouldSend = localStorage.getItem('triggerWelcomeEmail');
+            
+            if (shouldSend === 'true') {
+                const userEmail = localStorage.getItem('welcomeEmail'); // We'll save this in account.html
+                const userName = localStorage.getItem('welcomeName');
+                
+                if (userEmail) {
+                    // Fire the request to your worker
+                    fetch('https://jemaxma-site.lubegadoreen02.workers.dev', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email: userEmail, 
+                            name: userName 
+                        }),
+                        keepalive: true // Crucial: ensures it finishes even if they navigate away
+                    })
+                    .then(() => {
+                        // Cleanup so it only sends once
+                        localStorage.removeItem('triggerWelcomeEmail');
+                        localStorage.removeItem('welcomeEmail');
+                        localStorage.removeItem('welcomeName');
+                        console.log("Welcome email background process complete.");
+                    })
+                    .catch(err => console.log("Email task queued..."));
+                }
+            }
+        });
+
     (function() {
         // --- GLOBAL BUTTON SOUND (jx.mp3) ---
         function playButtonSound() {
