@@ -1,0 +1,823 @@
+ <!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Jamex Marketing Agency | Digital Excellence</title>
+    <link rel="icon" type="image/png" href="jamex.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            border-radius: 0 !important;
+            text-decoration: none;
+            list-style: none;
+            outline: none;
+        }
+        :root { --primary: #37B2F9; --whatsapp: #25D366; }
+        [data-theme="light"] {
+            --bg:         #ffffff;
+            --bg-section: #f3f3f3;
+            --bg-card:    #e9e9e9;
+            --bg-header:  rgba(255,255,255,0.97);
+            --bg-sidenav: #ffffff;
+            --border:     #d8d8d8;
+            --text-main:  #111111;
+            --text-muted: #666666;
+            --footer-bg:  #111111;
+            --footer-txt: #bbbbbb;
+        }
+        [data-theme="dark"] {
+            --bg:         #0a0a0a;
+            --bg-section: #111111;
+            --bg-card:    #1a1a1a;
+            --bg-header:  rgba(10,10,10,0.97);
+            --bg-sidenav: #0d0d0d;
+            --border:     #2a2a2a;
+            --text-main:  #f0f0f0;
+            --text-muted: #999999;
+            --footer-bg:  #050505;
+            --footer-txt: #aaaaaa;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Barlow', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background 0.35s, color 0.35s;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4%;
+            background: var(--bg-header);
+            border-bottom: 2px solid var(--primary);
+            z-index: 3000;
+            gap: 10px;
+            transition: height 0.3s, background 0.35s;
+        }
+        .logo-container { display: flex; align-items: center; flex-shrink: 0; }
+        .logo-container img { height: 50px; display: block; }
+        .logo-fallback {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 3px;
+        }
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+        .desktop-nav a {
+            color: var(--text-main);
+            font-size: clamp(0.75rem, 0.95vw, 0.9rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 11px;
+            transition: color 0.2s;
+            position: relative;
+            white-space: nowrap;
+        }
+        .desktop-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; left: 11px; right: 11px;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+        }
+        .desktop-nav a:hover { color: var(--primary); }
+        .desktop-nav a:hover::after { transform: scaleX(1); }
+        .nav-divider { width: 1px; height: 22px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+        .btn-nav-auth {
+            padding: 8px 14px;
+            font-size: clamp(0.72rem, 0.88vw, 0.84rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            border: 2px solid var(--primary);
+        }
+        .btn-nav-auth::after { display: none !important; }
+        .btn-nav-login { background: transparent; color: var(--primary) !important; }
+        .btn-nav-login:hover { background: var(--primary); color: #000 !important; }
+        .btn-nav-signup { background: var(--primary); color: #000 !important; }
+        .btn-nav-signup:hover { background: transparent; color: var(--primary) !important; }
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            font-family: 'Barlow', sans-serif;
+            font-size: clamp(0.72rem, 0.88vw, 0.82rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.35s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .theme-toggle:hover { border-color: var(--primary); color: var(--primary); }
+        .theme-toggle i { font-size: 1rem; }
+        [data-theme="light"] .lbl-dark  { display: inline; }
+        [data-theme="light"] .lbl-light { display: none; }
+        [data-theme="dark"]  .lbl-dark  { display: none; }
+        [data-theme="dark"]  .lbl-light { display: inline; }
+        .menu-toggle {
+            display: none;
+            width: 36px; height: 26px;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .bar { width: 100%; height: 3px; background: var(--text-main); transition: all 0.3s ease; }
+        .menu-toggle.open .bar:nth-child(1) { transform: translateY(11.5px) rotate(45deg); background: var(--primary); }
+        .menu-toggle.open .bar:nth-child(2) { opacity: 0; }
+        .menu-toggle.open .bar:nth-child(3) { transform: translateY(-11.5px) rotate(-45deg); background: var(--primary); }
+        .side-nav {
+            position: fixed;
+            top: 0; right: -110%;
+            width: min(340px, 100vw);
+            height: 100vh;
+            background: var(--bg-sidenav);
+            border-left: 3px solid var(--primary);
+            z-index: 3050;
+            display: flex;
+            flex-direction: column;
+            padding: 94px 36px 40px;
+            transition: right 0.45s cubic-bezier(0.77,0,0.175,1), background 0.35s;
+            overflow-y: auto;
+        }
+        .side-nav.active { right: 0; }
+        .side-nav-close {
+            position: absolute; top: 22px; right: 24px;
+            font-size: 26px; font-weight: 900;
+            color: var(--text-main); cursor: pointer;
+            transition: color 0.2s; line-height: 1;
+        }
+        .side-nav-close:hover { color: var(--primary); }
+        .side-nav a {
+            font-size: 1.4rem; font-weight: 800;
+            text-transform: uppercase; color: var(--text-main);
+            letter-spacing: 1px; transition: color 0.2s;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0; display: block;
+        }
+        .side-nav a:hover { color: var(--primary); }
+        .auth-signup-mobile {
+            margin-top: 18px;
+            background: var(--primary) !important;
+            color: #000 !important;
+            text-align: center; padding: 14px !important;
+            border-bottom: none !important;
+        }
+        .auth-login-mobile {
+            background: transparent !important; color: var(--primary) !important;
+            text-align: center; padding: 14px !important;
+            border: 2px solid var(--primary) !important;
+            border-bottom: 2px solid var(--primary) !important;
+            margin-top: 10px;
+        }
+        .side-theme-btn {
+            margin-top: 18px;
+            padding: 12px; width: 100%;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.84rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            gap: 8px; transition: 0.2s;
+        }
+        .side-theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .nav-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            opacity: 0; visibility: hidden;
+            transition: 0.3s; z-index: 3040;
+        }
+        .nav-overlay.active { opacity: 1; visibility: visible; }
+        .hero {
+            height: 100vh; min-height: 580px;
+            background: linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)),
+                        url('hero.jpg') center/cover no-repeat;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; padding: 80px 6% 0;
+        }
+        .brand-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(68px, 13vw, 155px);
+            color: #fff; letter-spacing: 6px; line-height: 0.92;
+        }
+        .hero-sub {
+            display: inline-block;
+            background: var(--primary); color: #000;
+            font-size: clamp(0.85rem, 2.2vw, 1.25rem);
+            font-weight: 800; letter-spacing: 6px;
+            text-transform: uppercase; padding: 8px 24px;
+            margin: 18px 0 26px;
+        }
+        .hero-desc {
+            color: #e6e6e6;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 620px; margin-bottom: 38px; font-weight: 500;
+        }
+        .btn-group { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 15px 42px;
+            font-family: 'Barlow', sans-serif;
+            font-size: clamp(0.88rem, 1.4vw, 1rem);
+            font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer;
+            transition: 0.2s; display: inline-block;
+            border: 2px solid transparent;
+        }
+        .btn-primary { background: var(--primary); color: #000; border-color: var(--primary); }
+        .btn-primary:hover { background: transparent; color: var(--primary); }
+        .btn-secondary { background: transparent; color: #fff; border-color: #fff; }
+        .btn-secondary:hover { background: #fff; color: #000; }
+        .section-title { text-align: center; padding: 70px 6% 48px; }
+        .section-title h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            letter-spacing: 4px; color: var(--text-main);
+            display: inline-block; padding-bottom: 10px;
+            border-bottom: 4px solid var(--primary);
+        }
+        .section-title p {
+            color: var(--text-muted);
+            font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+            margin-top: 14px; max-width: 580px;
+            margin-left: auto; margin-right: auto;
+        }
+        .video-section { background: var(--bg-section); padding-bottom: 80px; }
+        .video-box {
+            width: 90%; max-width: 1100px; margin: 0 auto;
+            border: 4px solid var(--primary); background: #000;
+        }
+        video { width: 100%; display: block; }
+        .services-section { background: var(--bg); padding-bottom: 80px; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2px; padding: 0 5%;
+        }
+        .service-box {
+            background: var(--bg-card);
+            padding: 46px 34px;
+            border: 1px solid var(--border);
+            transition: border-color 0.25s, background 0.35s;
+            position: relative; overflow: hidden;
+        }
+        .service-box::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; width: 4px; height: 0;
+            background: var(--primary); transition: height 0.3s;
+        }
+        .service-box:hover::before { height: 100%; }
+        .service-box:hover { border-color: var(--primary); }
+        .service-icon { font-size: 2rem; color: var(--primary); margin-bottom: 18px; }
+        .service-box h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+            letter-spacing: 2px; color: var(--text-main); margin-bottom: 12px;
+        }
+        .service-box p { color: var(--text-muted); font-size: clamp(0.9rem, 1.2vw, 1rem); line-height: 1.78; }
+        .showcase-section { background: var(--bg-section); padding-bottom: 80px; overflow: hidden; }
+        .image-marquee { width: 100%; overflow: hidden; padding: 8px 0; }
+        .marquee-track {
+            display: flex;
+            animation: mq 42s linear infinite;
+            width: max-content;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item {
+            width: clamp(210px, 22vw, 320px);
+            height: clamp(250px, 28vw, 400px);
+            margin: 0 10px; flex-shrink: 0;
+            border: 2px solid var(--border);
+            overflow: hidden; background: var(--bg-card);
+            transition: border-color 0.2s;
+        }
+        .marquee-item:hover { border-color: var(--primary); }
+        .marquee-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block; transition: transform 0.4s;
+        }
+        .marquee-item:hover img { transform: scale(1.05); }
+        .img-placeholder {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; color: var(--text-muted);
+        }
+        .img-placeholder i { font-size: 2.2rem; color: var(--primary); }
+        .img-placeholder span { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; }
+        @keyframes mq {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .cta-section { background: var(--primary); padding: 80px 6%; text-align: center; }
+        .cta-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: 3px; color: #000; margin-bottom: 14px;
+        }
+        .cta-section p {
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            color: #111; margin-bottom: 38px; font-weight: 600;
+            max-width: 540px; margin-left: auto; margin-right: auto;
+        }
+        .cta-buttons { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+        .btn-cta-dark {
+            background: #000; color: #fff !important;
+            border: 2px solid #000;
+            padding: 15px 42px;
+            font-size: clamp(0.88rem, 1.3vw, 1rem);
+            font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-cta-dark:hover { background: transparent; color: #000 !important; }
+        .btn-cta-outline {
+            background: transparent; color: #000 !important;
+            border: 2px solid #000;
+            padding: 15px 42px;
+            font-size: clamp(0.88rem, 1.3vw, 1rem);
+            font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-cta-outline:hover { background: #000; color: #fff !important; }
+        .contact-section { background: var(--bg-section); padding: 70px 6%; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 40px; max-width: 1200px; margin: 0 auto;
+        }
+        .contact-block h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem; letter-spacing: 2px;
+            color: var(--primary); margin-bottom: 10px;
+        }
+        .contact-block p {
+            color: var(--text-main);
+            font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+            font-weight: 500; line-height: 1.9;
+        }
+        .social-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .social-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            font-size: 0.84rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            background: var(--bg-card); color: var(--text-main);
+            border: 1px solid var(--border); cursor: pointer; transition: 0.2s;
+        }
+        .social-btn i { font-size: 1.05rem; }
+        .social-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .social-btn.whatsapp-btn { background: var(--whatsapp); color: #fff; border-color: var(--whatsapp); }
+        .social-btn.whatsapp-btn:hover { background: #1da851; border-color: #1da851; }
+        footer {
+            background: var(--footer-bg);
+            padding: 70px 6% 28px;
+            border-top: 3px solid var(--primary);
+            transition: background 0.35s;
+        }
+        .footer-grid {
+            display: grid; grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px; margin-bottom: 56px;
+        }
+        .footer-logo img { height: 52px; margin-bottom: 16px; }
+        .footer-desc { color: var(--footer-txt); font-size: clamp(0.84rem, 1.1vw, 0.95rem); line-height: 1.85; }
+        .footer-col h5 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; letter-spacing: 2px;
+            color: var(--primary); margin-bottom: 20px;
+        }
+        .footer-col ul li { margin-bottom: 11px; }
+        .footer-col ul li a { color: var(--footer-txt); font-size: 0.94rem; transition: 0.2s; }
+        .footer-col ul li a:hover { color: var(--primary); padding-left: 5px; }
+        .qr-area {
+            border-top: 1px solid #2a2a2a; padding-top: 48px;
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center; gap: 14px;
+        }
+        .qr-area h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; letter-spacing: 3px; color: var(--primary);
+        }
+        .qr-wrapper {
+            width: 195px; padding: 11px;
+            background: #fff; border: 3px solid var(--primary);
+            position: relative;
+        }
+        .qr-wrapper img { width: 100%; display: block; }
+        .scan-effect::after {
+            content: ''; position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(55,178,249,0.9);
+            animation: scanLine 0.85s ease forwards;
+            pointer-events: none;
+        }
+        @keyframes scanLine {
+            0%   { top: 0; opacity: 1; }
+            95%  { top: 100%; opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .btn-scan {
+            background: var(--primary); color: #000;
+            border: none; padding: 13px 30px;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 800; font-size: 0.95rem;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-scan:hover { background: #fff; }
+        .qr-note { font-size: 0.76rem; color: #666; }
+        .footer-copy {
+            text-align: center; padding-top: 28px;
+            border-top: 1px solid #222;
+            color: #555; font-size: 0.82rem; margin-top: 36px;
+        }
+        @media (max-width: 1100px) {
+            .desktop-nav a { padding: 8px 7px; }
+            .btn-nav-auth { padding: 8px 11px; }
+        }
+        @media (max-width: 900px) {
+            .desktop-nav { display: none; }
+            .menu-toggle { display: flex; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            header { padding: 0 5%; }
+            .theme-toggle .lbl-dark,
+            .theme-toggle .lbl-light { display: none !important; }
+            .theme-toggle { padding: 9px 11px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .btn-group { flex-direction: column; width: 82%; margin: 0 auto; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .cta-buttons a { width: 240px; text-align: center; display: block; }
+            .contact-grid { grid-template-columns: 1fr; text-align: center; }
+            .social-links { justify-content: center; }
+            .services-grid { grid-template-columns: 1fr; padding: 0 4%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav-overlay" id="overlay"></div>
+
+<header>
+    <div class="logo-container">
+        <img src="jamex.png" alt="Jamex Logo"
+             onerror="this.style.display='none';document.getElementById('logoTxt').style.display='block'">
+        <span class="logo-fallback" id="logoTxt" style="display:none;">JAMEX</span>
+    </div>
+    <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="apply.html">Apply Now</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="location.html">Location</a>
+        <a href="contact.html">Contact</a>
+        <div class="nav-divider"></div>
+        <a href="account.html" class="btn-nav-auth btn-nav-login">Login</a>
+        <a href="account.html" class="btn-nav-auth btn-nav-signup">Sign Up</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle colour theme">
+        <i id="themeIcon" class="fas fa-moon"></i>
+        <span class="lbl-dark">Dark Mode</span>
+        <span class="lbl-light">Light Mode</span>
+    </button>
+    <div class="menu-toggle" id="menuBtn" role="button" tabindex="0" aria-label="Open menu">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+</header>
+
+<nav class="side-nav" id="sideNav" aria-hidden="true">
+    <div class="side-nav-close" id="closeX" role="button" tabindex="0">&#10005;</div>
+    <a href="index.html">Home</a>
+    <a href="apply.html">Apply Now</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="location.html">Location</a>
+    <a href="contact.html">Contact</a>
+    <a href="account.html" class="auth-signup-mobile">Create Account</a>
+    <a href="account.html" class="auth-login-mobile">Login</a>
+    <button class="side-theme-btn" id="sideThemeToggle" aria-label="Toggle colour theme">
+        <i id="sideThemeIcon" class="fas fa-moon"></i>
+        <span class="lbl-dark">Switch to Dark</span>
+        <span class="lbl-light">Switch to Light</span>
+    </button>
+    <div style="margin-top:auto;padding-top:24px;border-top:1px solid var(--border);">
+        <p style="font-size:0.74rem;color:var(--text-muted);text-transform:uppercase;margin-bottom:5px;">Direct Line</p>
+        <p style="color:var(--primary);font-weight:700;font-size:1rem;">+256 704 242193</p>
+    </div>
+</nav>
+
+<main>
+    <section class="hero">
+        <h1 class="brand-name">Jamex</h1>
+        <span class="hero-sub">Marketing Agency</span>
+        <p class="hero-desc">Your brand deserves to stand out. We bring creativity and strategy to help your brand grow in Uganda and beyond.</p>
+        <div class="btn-group">
+            <a href="apply.html" class="btn btn-primary">Apply Now</a>
+            <a href="gallery.html" class="btn btn-secondary">Our Work</a>
+        </div>
+    </section>
+
+    <section class="video-section">
+        <div class="section-title">
+            <h2>See Us In Action</h2>
+            <p>Watch how we bring brands to life on the ground and across digital platforms.</p>
+        </div>
+        <div class="video-box">
+            <video autoplay muted loop playsinline>
+                <source src="jx.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="section-title">
+            <h2>Our Services</h2>
+            <p>Full-spectrum marketing solutions tailored for the Ugandan market.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-fingerprint"></i></div>
+                <h3>Branding</h3>
+                <p>Establishing a powerful identity that resonates. From logo development to full-scale corporate brand manuals, we define who you are.</p>
+            </div>
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-video"></i></div>
+                <h3>Content Creation</h3>
+                <p>Engaging digital storytelling. High-quality video, photography, and copy designed to stop the scroll and drive engagement.</p>
+            </div>
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <h3>Flyer Distribution</h3>
+                <p>Ground-level marketing with precision. Massive physical campaigns ensuring your message hits the right hands in Kampala.</p>
+            </div>
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-pen-nib"></i></div>
+                <h3>Graphic Design</h3>
+                <p>Visual excellence without compromise. Professional posters, brochures, and digital assets crafted with modern aesthetics.</p>
+            </div>
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
+                <h3>Digital Ads</h3>
+                <p>Strategic placement on Billboards, TikTok, Instagram, and Facebook. We manage your ad spend to maximize ROI and leads.</p>
+            </div>
+            <div class="service-box">
+                <div class="service-icon"><i class="fas fa-chart-bar"></i></div>
+                <h3>Market Analysis</h3>
+                <p>Deep data dives into Ugandan consumer behavior to ensure your marketing spend is backed by solid scientific evidence.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase-section">
+        <div class="section-title">
+            <h2>Showcase</h2>
+            <p>A glimpse of the campaigns and creative work we have delivered for our clients.</p>
+        </div>
+        <div class="image-marquee">
+            <div class="marquee-track">
+                <div class="marquee-item"><img src="jx.jpg"  alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx1.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx1.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx2.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx2.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx3.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx3.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx4.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx4.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx5.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx5.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx6.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx6.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx.jpg"  alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx1.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx1.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx2.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx2.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx3.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx3.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx4.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx4.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx5.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx5.jpg</span></div>'"></div>
+                <div class="marquee-item"><img src="jx6.jpg" alt="Jamex work" onerror="this.parentNode.innerHTML='<div class=\'img-placeholder\'><i class=\'fas fa-image\'></i><span>jx6.jpg</span></div>'"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Join Jamex Today</h2>
+        <p>Create an account or log in to access exclusive offers and track your campaign progress.</p>
+        <div class="cta-buttons">
+            <a href="account.html" class="btn-cta-dark">Create Account</a>
+            <a href="account.html" class="btn-cta-outline">Login</a>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="section-title" style="padding-top:0;">
+            <h2>Get In Touch</h2>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-block">
+                <h4>Email Us</h4>
+                <p>jamexmarketingagency@gmail.com</p>
+            </div>
+            <div class="contact-block">
+                <h4>Call Center</h4>
+                <p>0704 242193<br>0753 151103<br>0760 254053</p>
+            </div>
+            <div class="contact-block">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="https://www.tiktok.com/@jamexmarketingagency?_r=1&_t=ZS-95yKA8fCIPC"
+                       class="social-btn" target="_blank" rel="noopener">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://www.instagram.com/jamex_marketing_agency?igsh=dmR2N215c3Blemo="
+                       class="social-btn" target="_blank" rel="noopener">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="#" id="whatsappShareBtn" class="social-btn whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <div class="footer-logo">
+                <img src="jamex.png" alt="Jamex Logo" onerror="this.style.display='none'">
+            </div>
+            <p class="footer-desc">Jamex Marketing Agency is a premier advertising firm based in Kampala, Uganda, dedicated to transforming business goals into measurable success through innovative marketing strategies.</p>
+        </div>
+        <div class="footer-col">
+            <h5>Navigation</h5>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="apply.html">Service Application</a></li>
+                <li><a href="gallery.html">Our Work</a></li>
+                <li><a href="contact.html">Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h5>Services</h5>
+            <ul>
+                <li><a href="#">Corporate Branding</a></li>
+                <li><a href="#">Content Production</a></li>
+                <li><a href="#">Field Marketing</a></li>
+                <li><a href="#">Strategic Consulting</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="qr-area">
+        <h4>Scan Our QR</h4>
+        <div class="qr-wrapper" id="qrContainer">
+            <img src="qr.jpg" alt="QR Code" id="qrImage"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23222%22/%3E%3Ctext x=%2250%22 y=%2255%22 fill=%22%2337B2F9%22 font-size=%2214%22 text-anchor=%22middle%22 font-family=%22Arial%22%3EQR%3C/text%3E%3C/svg%3E'">
+        </div>
+        <a href="https://wa.me/qr/HD2LAPF2K2C6G1" target="_blank" rel="noopener">
+            <button class="btn-scan" id="scanQrButton">Scan QR Code</button>
+        </a>
+        <p class="qr-note">Tap to open our WhatsApp link directly</p>
+    </div>
+    <div class="footer-copy">
+        &copy; 2026 Jamex Marketing Agency | Kampala, Uganda. All Rights Reserved.
+    </div>
+</footer>
+
+<script>
+(function () {
+    // ✅ Send welcome email if flagged from account.html signup
+    const triggerEmail = localStorage.getItem('triggerWelcomeEmail');
+    if (triggerEmail === 'true') {
+        const email = localStorage.getItem('welcomeEmail');
+        const name  = localStorage.getItem('welcomeName');
+        localStorage.removeItem('triggerWelcomeEmail');
+        localStorage.removeItem('welcomeEmail');
+        localStorage.removeItem('welcomeName');
+        if (email) {
+            fetch('https://jemaxma-site.lubegadoreen02.workers.dev', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name })
+            }).catch(() => {});
+        }
+    }
+
+    const html        = document.documentElement;
+    const STORE       = 'jamex-theme';
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon   = document.getElementById('themeIcon');
+    const sideToggle  = document.getElementById('sideThemeToggle');
+    const sideIcon    = document.getElementById('sideThemeIcon');
+
+    function applyTheme(t) {
+        html.setAttribute('data-theme', t);
+        try { localStorage.setItem(STORE, t); } catch(e) {}
+        const moon = t === 'light';
+        if (themeIcon) themeIcon.className = moon ? 'fas fa-moon' : 'fas fa-sun';
+        if (sideIcon)  sideIcon.className  = moon ? 'fas fa-moon' : 'fas fa-sun';
+    }
+    function toggleTheme() {
+        applyTheme(html.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    }
+    let saved = 'light';
+    try { saved = localStorage.getItem(STORE) || 'light'; } catch(e) {}
+    applyTheme(saved);
+
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+    if (sideToggle)  sideToggle.addEventListener('click',  toggleTheme);
+
+    function playSound() {
+        try { const a = new Audio('jx.mp3'); a.volume = 0.38; a.play().catch(() => {}); } catch(e) {}
+    }
+    document.body.addEventListener('click', e => {
+        if (e.target.closest('.btn,.social-btn,.side-nav a,.menu-toggle,.side-nav-close,.btn-scan,.btn-cta-dark,.btn-cta-outline,.btn-nav-auth,.desktop-nav a,.theme-toggle,.side-theme-btn'))
+            playSound();
+    });
+
+    const menuBtn = document.getElementById('menuBtn');
+    const sideNav = document.getElementById('sideNav');
+    const overlay = document.getElementById('overlay');
+    const closeX  = document.getElementById('closeX');
+
+    function openMenu()  {
+        menuBtn.classList.add('open');
+        sideNav.classList.add('active');
+        overlay.classList.add('active');
+        sideNav.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+        menuBtn.classList.remove('open');
+        sideNav.classList.remove('active');
+        overlay.classList.remove('active');
+        sideNav.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+    }
+    menuBtn.addEventListener('click',   e => { e.stopPropagation(); sideNav.classList.contains('active') ? closeMenu() : openMenu(); });
+    menuBtn.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); menuBtn.click(); }});
+    overlay.addEventListener('click',   closeMenu);
+    closeX.addEventListener('click',    e => { e.stopPropagation(); closeMenu(); });
+    closeX.addEventListener('keydown',  e => { if (e.key==='Enter') closeMenu(); });
+    document.addEventListener('keydown',e => { if (e.key==='Escape') closeMenu(); });
+    sideNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    const scanBtn   = document.getElementById('scanQrButton');
+    const qrWrapper = document.getElementById('qrContainer');
+    if (scanBtn && qrWrapper) {
+        scanBtn.addEventListener('click', () => {
+            qrWrapper.classList.remove('scan-effect');
+            void qrWrapper.offsetWidth;
+            qrWrapper.classList.add('scan-effect');
+            setTimeout(() => qrWrapper.classList.remove('scan-effect'), 870);
+        });
+    }
+
+    const waBtn = document.getElementById('whatsappShareBtn');
+    if (waBtn) {
+        waBtn.addEventListener('click', e => {
+            e.preventDefault();
+            const url  = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out Jamex Marketing Agency — professional advertising and creative services in Kampala.');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+        });
+    }
+
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        header.style.height = window.scrollY > 60 ? '62px' : '80px';
+    }, { passive: true });
+})();
+</script>
+</body>
+</html>
